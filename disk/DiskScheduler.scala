@@ -136,7 +136,20 @@ private[spark] class DiskScheduler(
         if (loadBalanceDiskWrites) {
           // Add the monotask to all disk queues; the monotask will be run by whichever disk
           // is available sooner.
-          diskIds.foreach(addToDiskQueue(task, _))
+          // diskIds.foreach(addToDiskQueue(task, _))
+          var disk_size = 100000
+          for (disk <- diskIds){
+            disk_task_count = diskAccessors(disk).taskQueue.count()
+            if( disk_task_count < disk_size ) {
+              var new_disk = disk
+              if( disk_task_count = 0) {
+                break
+              }
+              disk_size = disk_task_count
+            }
+          }
+          disk.addToDiskQueue(task, _))
+          
           return
         } else {
           val id = getNextDiskId()
