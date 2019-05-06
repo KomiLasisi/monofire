@@ -79,9 +79,9 @@ private[spark] class ComputeScheduler(
     }
     if (monotask.isInstanceOf[PrepareMonotask] ||
         monotask.isInstanceOf[ResultSerializationMonotask]) {
-      monotaskQueue.putFirst(monotask)
+      monotaskQueue.putLast(monotask)
     } else {
-      monotaskQueue.put(monotask)
+      monotaskQueue.putLast(monotask)
     }
     this.notify()
   }
